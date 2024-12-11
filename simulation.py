@@ -93,9 +93,13 @@ class GrasppingScenarios():
         ## camera settings: cam_pos, cam_target, near, far, size, fov
         center_x, center_y, center_z = 0.05, -0.52, self.CAM_Z
         camera = Camera((center_x, center_y, center_z), (center_x, center_y, 0.785), 0.2, 2.0, (self.IMG_SIZE, self.IMG_SIZE), 40)
-        env = Environment(camera, vis=vis, debug=debug, finger_length=0.06)
+        eih_camera = Camera((center_x, center_y, center_z), (center_x, center_y, 0.785), 0.2, 2.0, (self.IMG_SIZE, self.IMG_SIZE), 40)
+        eih_camera.x += 1
+        eih_camera.y += 10
+        eih_camera.z += 5
+        env = Environment(camera, eih_camera, vis=vis, debug=debug, finger_length=0.06)
         
-        generator = GraspGenerator(self.network_path, camera, self.depth_radius, self.fig, self.IMG_SIZE, self.network_model, device)
+        generator = GraspGenerator(self.network_path, camera, eih_camera, self.depth_radius, self.fig, self.IMG_SIZE, self.network_model, device)
         
         objects.shuffle_objects()
         for i in range(runs):

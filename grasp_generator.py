@@ -22,7 +22,7 @@ class GraspGenerator:
     DIST_BACKGROUND = 1.115
     MAX_GRASP = 0.085
 
-    def __init__(self, net_path, camera, depth_radius, fig, IMG_WIDTH=224, network='GR_ConvNet', device='cpu'):
+    def __init__(self, net_path, camera, eih_camera, depth_radius, fig, IMG_WIDTH=224, network='GR_ConvNet', device='cpu'):
 
         if (device=='cpu'):
             self.net = torch.load(net_path, map_location=device)
@@ -145,8 +145,7 @@ class GraspGenerator:
             img_data = CameraData(width=self.IMG_WIDTH, height=self.IMG_WIDTH, output_size=300, include_rgb=False, include_depth=True)
             x, depth_img, rgb_img = img_data.get_data(rgb=rgb, depth=depth)
             x = torch.from_numpy(depth.reshape(1,1,self.IMG_WIDTH, self.IMG_WIDTH).astype(np.float32))
-            print(x)
-            exit()
+            # print(x)
         else:
             print("The selected network has not been implemented yet -- please choose another network!")
             exit() 

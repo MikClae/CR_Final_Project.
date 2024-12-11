@@ -21,10 +21,11 @@ class Environment:
     Z_TABLE_TOP = 0.785
     GRIP_REDUCTION = 0.60
 
-    def __init__(self, camera: Camera, vis=False, debug=False, gripper_type='140', finger_length=0.06) -> None:
+    def __init__(self, camera: Camera, eih_camera, vis=False, debug=False, gripper_type='140', finger_length=0.06) -> None:
         self.vis = vis
         self.debug = debug
         self.camera = camera
+        self.eih_camera = eih_camera
 
         self.obj_init_pos = (camera.x, camera.y)
         self.obj_ids = []
@@ -171,6 +172,8 @@ class Environment:
                 if self.eef_debug_lineID is not None:
                     p.removeUserDebugItem(self.eef_debug_lineID)
                 eef_xyz = p.getLinkState(self.robot_id, self.eef_id)[0:1]
+                print(eef_xyz)
+                # END EFFECTOR XYZ!!!!!!!!!!
                 end = np.array(eef_xyz[0])
                 end[2] -= 0.5
                 self.eef_debug_lineID = p.addUserDebugLine(np.array(eef_xyz[0]), end, [1, 0, 0])
