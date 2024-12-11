@@ -139,6 +139,13 @@ class GraspGenerator:
             depth = np.expand_dims(np.array(depth), axis=2)
             img_data = CameraData(width=self.IMG_WIDTH, height=self.IMG_WIDTH)
             x, depth_img, rgb_img = img_data.get_data(rgb=rgb, depth=depth)
+        elif (self.network == 'ggcnn'):
+            ##### ggcnn #####
+            depth = np.expand_dims(np.array(depth), axis=2)
+            img_data = CameraData(width=self.IMG_WIDTH, height=self.IMG_WIDTH, output_size=300, include_rgb=False, include_depth=True)
+            x, depth_img, rgb_img = img_data.get_data(rgb=rgb, depth=depth)
+            x = torch.from_numpy(depth.reshape(1,1,self.IMG_WIDTH, self.IMG_WIDTH).astype(np.float32))
+            # print(x.size())
         else:
             print("The selected network has not been implemented yet -- please choose another network!")
             exit() 
@@ -155,6 +162,16 @@ class GraspGenerator:
                                                                 pred['cos'],
                                                                 pred['sin'],
                                                                 pred['width'],
+                                                                pixels_max_grasp)
+            elif (self.network == 'ggcnn'):
+                ##### ggcnn #####
+                pred = self.net.forward(xc)
+                # print (pred)
+                pixels_max_grasp = int(self.MAX_GRASP * self.PIX_CONVERSION)
+                q_img, ang_img, width_img = self.post_process_output(pred[0],
+                                                                pred[1],
+                                                                pred[2],
+                                                                pred[3],
                                                                 pixels_max_grasp)
             else: 
                 print ("you need to add your function here!")        
