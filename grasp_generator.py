@@ -131,7 +131,7 @@ class GraspGenerator:
     def predict(self, rgb, depth, n_grasps=1, show_output=False):
 
         max_val = np.max(depth)
-        depth = depth * (255 / max_val)
+        depth = depth * (255 / max_val) # change depth array to include first half with value 0.
         depth = np.clip((depth - depth.mean())/175, -1, 1)
         
         if (self.network == 'GR_ConvNet'):
@@ -145,7 +145,8 @@ class GraspGenerator:
             img_data = CameraData(width=self.IMG_WIDTH, height=self.IMG_WIDTH, output_size=300, include_rgb=False, include_depth=True)
             x, depth_img, rgb_img = img_data.get_data(rgb=rgb, depth=depth)
             x = torch.from_numpy(depth.reshape(1,1,self.IMG_WIDTH, self.IMG_WIDTH).astype(np.float32))
-            # print(x.size())
+            print(x)
+            exit()
         else:
             print("The selected network has not been implemented yet -- please choose another network!")
             exit() 
